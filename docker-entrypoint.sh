@@ -9,7 +9,8 @@ MY_UID=$(stat -c %u /home/ansible/ansible_project)
 MY_GID=$(stat -c %g /home/ansible/ansible_project)
 
 # Change gui/uid of ansible user
-groupmod -g $MY_GID ansible
-usermod -u $MY_UID -g $MY_GID ansible
+groupmod --gid $MY_GID ansible
+usermod --uid $MY_UID --gid $MY_GID ansible
+chown ansible:ansible /home/ansible /home/ansible/.ansible
 
 sudo -H -E -u ansible "$@"

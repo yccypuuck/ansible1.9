@@ -13,8 +13,7 @@ RUN yum -y install ansible1.9 ansible-lint openssh-clients python-boto python-dn
 # Create user, group and home directory
 RUN groupadd -r ansible -g 433 && \
     useradd -u 431 -r -g ansible -d /home/ansible -s /sbin/nologin -c "Ansible Docker image user" ansible && \
-    mkdir -p /home/ansible/.ansible && \
-    chown -R ansible:ansible /home/ansible
+    mkdir -p /home/ansible/.ansible
 
 #Sudo requires a tty. fix that.
 RUN sed -i 's/.*requiretty$/#Defaults requiretty/' /etc/sudoers
