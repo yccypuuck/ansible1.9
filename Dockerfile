@@ -2,6 +2,9 @@
 FROM centos:latest
 MAINTAINER Petr Ruzicka <petr.ruzicka@gmail.com>
 
+# Enviroment
+ENV ANSIBLE_VAULT_PASSWORD_FILE=/home/ansible/.vault_pass.txt
+
 # Update base image
 RUN yum -y update; yum clean all
 
