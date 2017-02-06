@@ -2,9 +2,6 @@
 FROM centos:latest
 MAINTAINER Petr Ruzicka <petr.ruzicka@gmail.com>
 
-# Enviroment
-ENV ANSIBLE_VAULT_PASSWORD_FILE=/home/ansible/.vault_pass.txt
-
 # Update base image
 RUN yum -y update; yum clean all
 
@@ -23,6 +20,8 @@ RUN sed -i 's/.*requiretty$/#Defaults requiretty/' /etc/sudoers
 
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
+
+VOLUME /home/ansible/ansible_project
 
 WORKDIR /home/ansible/ansible_project
 
