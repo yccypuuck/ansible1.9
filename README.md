@@ -13,8 +13,9 @@ ANSIBLE_VAULT_PASSWORD_FILE=${ANSIBLE_VAULT_PASSWORD_FILE:-"~/.ansible/vault.pas
 DOCKER_PARAMETERS="
   run --interactive --tty --rm \
   --env SSH_AUTH_SOCK=/ssh-agent \
-  --env ANSIBLE_VAULT_PASSWORD_FILE=$ANSIBLE_VAULT_PASSWORD_FILE \
-  --volume $(readlink -f $SSH_AUTH_SOCK):/ssh-agent \
+  --env ANSIBLE_VAULT_PASSWORD_FILE=/home/ansible/.vault_pass.txt
+  --volume ${ANSIBLE_VAULT_PASSWORD_FILE}:/home/ansible/.vault_pass.txt:ro \
+  --volume $SSH_AUTH_SOCK:/ssh-agent \
   --volume $HOME/.aws:/home/ansible/.aws:ro \
   --volume $HOME/.ansible:/home/ansible/.ansible:ro \
   --volume $HOME/.ansible/tmp:/home/ansible/.ansible/tmp \
@@ -26,6 +27,11 @@ DOCKER_PARAMETERS="
 sudo docker $DOCKER_PARAMETERS ansible-playbook sites/cluster/site.yml --tags stack
 ```
 
+Or something easier:
+
+```
+docker run --interactive --rm --volume $PWD:/home/ansible/ansible_project:ro peru/ansible1.9 ansible-playbook --version
+```
 
 ## License
 
