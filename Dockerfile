@@ -1,9 +1,6 @@
 # pull base image
 FROM centos:centos6
 
-MAINTAINER William Yeh <william.pjyeh@gmail.com>
-
-
 RUN echo "===> Installing EPEL..."        && \
     yum -y install epel-release           && \
     \
