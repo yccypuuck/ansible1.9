@@ -1,35 +1,21 @@
-# pull base image
-FROM centos:centos6
+# Latest version of centos
+FROM centos:latest
+MAINTAINER Petr Ruzicka <petr.ruzicka@gmail.com>
 
-RUN echo "===> Installing EPEL..."        && \
-    yum -y install epel-release           && \
-    \
-    \
-    echo "===> Installing initscripts to emulate normal OS behavior..."  && \
-    yum -y install initscripts sudo                                      && \
-    \
-    \
-    echo "===> Installing Ansible..."                    && \
-    yum -y --enablerepo=epel-testing install ansible1.9  && \
-    \
-    \
-    echo "===> Disabling sudo 'requiretty' setting..."    && \
-    sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers  || true  && \
-    \
-    \
-    echo "===> Installing handy tools (not absolutely required)..."  && \
-    yum -y install sshpass openssh-clients  && \
-    \
-    \
-    echo "===> Removing unused YUM resources..."  && \
-    yum -y remove epel-release                    && \
-    yum clean all                                 && \
-    \
-    \
-    echo "===> Adding hosts for convenience..."   && \
-    mkdir -p /etc/ansible                         && \
-    echo 'localhost' > /etc/ansible/hosts         && \
-    groupadd -r ansible -g 433 && \
+# Update base image
+RUN yum -y update; yum clean all
+
+RUN yum -y install epel-release; yum clean all
+
+RUN yum -y install gcc libffi-devel python-devel openssl-devel openssh-clients python-pip sudo; yum clean all
+RUN pip install --upgrade pip virtualenv virtualenvwrapper
+RUN virtualenv ansible1.9
+RUN source ansible1.9/bin/activate
+# RUN pip install python-boto3 python-dev libxml2-dev libxslt-dev python2-boto3 python-dns python-netaddr
+RUN pip install ansible==1.9.3
+RUN pip install redis
+
+RUN groupadd -r ansible -g 433 && \
     useradd -u 431 -r -g ansible -d /home/ansible -s /sbin/nologin -c "Ansible Docker image user" ansible && \
     mkdir -p /home/ansible/.ansible/{tmp,cp}
 
@@ -42,5 +28,5 @@ VOLUME /home/ansible/ansible_project
 
 WORKDIR /home/ansible/ansible_project
 
-# default command: display Ansible version
-CMD [ "ansible-playbook", "--version" ]
+# default command:
+CMD [ "ansible-playbook" ]
