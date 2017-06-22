@@ -3,11 +3,33 @@ FROM centos:latest
 MAINTAINER Petr Ruzicka <petr.ruzicka@gmail.com>
 
 # Update base image
-RUN yum -y update; yum clean all
-
-RUN yum -y install epel-release; yum clean all
-
-RUN yum -y install ansible-1.9.3 ansible-lint openssh-clients python-boto python2-boto3 python-dns python-netaddr sudo; yum clean all
+RUN echo "===> Installing sudo to emulate normal OS behavior..."  && \
+    apk --update add sudo                                         && \
+    \
+    \
+    echo "===> Adding Python runtime..."  && \
+    apk --update add python py-pip openssl ca-certificates    && \
+    apk --update add --virtual build-dependencies \
+                python-dev libffi-dev openssl-dev build-base  && \
+    pip install --upgrade pip cffi                            && \
+    \
+    \
+    echo "===> Installing Ansible..."  && \
+    pip install ansible==1.9.3         && \
+    \
+    \
+    echo "===> Installing handy tools (not absolutely required)..."  && \
+    apk --update add sshpass openssh-client rsync  && \
+    \
+    \
+    echo "===> Removing package list..."  && \
+    apk del build-dependencies            && \
+    rm -rf /var/cache/apk/*               && \
+    \
+    \
+    echo "===> Adding hosts for convenience..."  && \
+    mkdir -p /etc/ansible                        && \
+    echo 'localhost' > /etc/ansible/hosts
 
 RUN groupadd -r ansible -g 433 && \
     useradd -u 431 -r -g ansible -d /home/ansible -s /sbin/nologin -c "Ansible Docker image user" ansible && \
