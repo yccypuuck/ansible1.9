@@ -7,11 +7,10 @@ RUN yum -y update; yum clean all
 
 RUN yum -y install epel-release; yum clean all
 
-RUN yum -y install gcc libffi-devel python-devel openssl-devel openssh-clients python-pip sudo; yum clean all
+RUN yum -y install gcc libffi-devel python-devel openssl-devel openssh-clients python-pip python-boto python-dev libxml2-dev libxslt-dev python2-boto3 python-dns python-netaddr sudo; yum clean all
 RUN pip install --upgrade pip virtualenv virtualenvwrapper
 RUN virtualenv ansible1.9
 RUN source ansible1.9/bin/activate
-# RUN pip install python-boto3 python-dev libxml2-dev libxslt-dev python2-boto3 python-dns python-netaddr
 RUN pip install ansible==1.9.3
 RUN pip install redis
 
