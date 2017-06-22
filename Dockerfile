@@ -1,6 +1,5 @@
 # Latest version of centos
-FROM centos:latest
-MAINTAINER Petr Ruzicka <petr.ruzicka@gmail.com>
+FROM alpine:3.4
 
 # Update base image
 RUN echo "===> Installing sudo to emulate normal OS behavior..."  && \
@@ -44,5 +43,5 @@ VOLUME /home/ansible/ansible_project
 
 WORKDIR /home/ansible/ansible_project
 
-# default command:
-CMD [ "ansible-playbook" ]
+# default command: display Ansible version
+CMD [ "ansible-playbook", "--version" ]
