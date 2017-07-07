@@ -11,7 +11,7 @@ RUN yum -y install gcc libffi-devel python-devel openssl-devel openssh-clients p
 RUN pip install --upgrade pip virtualenv virtualenvwrapper
 RUN virtualenv ansible1.9
 RUN source ansible1.9/bin/activate
-RUN pip install ansible==1.9.3
+RUN pip install -U ansible==1.9.3 'jinja2<2.9'
 RUN pip install redis
 
 RUN groupadd -r ansible -g 433 && \
