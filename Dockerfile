@@ -5,8 +5,7 @@ MAINTAINER Petr Ruzicka <petr.ruzicka@gmail.com>
 # Update base image
 RUN yum -y update; yum clean all
 
-RUN yum -y install epel-release; yum clean all
-RUN yum -y install devtoolset-3; yum clean all
+RUN yum -y install epel-release strace; yum clean all
 
 RUN yum -y install gcc libffi-devel python-devel openssl-devel openssh-clients python-pip python-boto python-dev libxml2-dev libxslt-dev python2-boto3 python-dns python-netaddr sudo; yum clean all
 RUN pip install --upgrade pip virtualenv virtualenvwrapper
